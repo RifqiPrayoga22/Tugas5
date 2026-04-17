@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume Sesi 5 — Multiple Inheritance & Class Modifiers</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #ffffff;
+    color: #1e293b;
+    line-height: 1.6;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: white;
+    padding: 40px 0 30px;
+    border-bottom: 4px solid #3b82f6;
+  }
+
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .header h1 span {
+    color: #60a5fa;
+  }
+
+  .header p {
+    color: #cbd5e1;
+    font-size: 15px;
+    max-width: 600px;
+    margin-bottom: 20px;
+  }
+
+  .info-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0 0;
+  }
+
+  .info-card {
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .info-card strong {
+    color: #60a5fa;
+  }
+
+  .toc {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin: 30px 0;
+    border: 1px solid #e2e8f0;
+  }
+
+  .toc h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #0f172a;
+  }
+
+  .toc-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .toc-item {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #1e293b;
+    transition: all 0.2s;
+    border: 1px solid #e2e8f0;
+  }
+
+  .toc-item:hover {
+    background: #3b82f6;
+    color: white;
+  }
+
+  .legend {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .legend-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .badge-dp {
+    background: #10b981;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .badge-vs {
+    background: #3b82f6;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .badge-bonus {
+    background: #f59e0b;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .section {
+    background: white;
+    border-radius: 20px;
+    margin-bottom: 32px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+  }
+
+  .section-header {
+    padding: 20px 24px;
+    border-bottom: 2px solid #e2e8f0;
+    background: #fafcff;
+  }
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .section-title .badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  .badge-mixin { background: #dbeafe; color: #1d4ed8; }
+  .badge-sealed { background: #f3e8ff; color: #7c3aed; }
+  .badge-base { background: #dcfce7; color: #15803d; }
+  .badge-final { background: #ffedd5; color: #b45309; }
+  .badge-compare { background: #f1f5f9; color: #475569; }
+
+  .section-desc {
+    font-size: 14px;
+    color: #475569;
+    margin-top: 8px;
+  }
+
+  .section-content {
+    padding: 24px;
+  }
+
+  .explanation {
+    background: #f0fdf4;
+    border-left: 4px solid #22c55e;
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: #166534;
+  }
+
+  .explanation strong {
+    color: #0f172a;
+  }
+
+  .explanation code {
+    background: #dcfce7;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+
+  .tip-box {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 13px;
+    color: #92400e;
+  }
+
+  .concept-box {
+    background: #f0f9ff;
+    border-left: 4px solid #3b82f6;
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #1e293b;
+  }
+
+  .feature-list {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+  }
+
+  .feature-item:last-child {
+    border-bottom: none;
+  }
+
+  .feature-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .file-structure {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: #cbd5e1;
+    border: 1px solid #334155;
+  }
+
+  .file-structure .folder {
+    color: #60a5fa;
+  }
+
+  .file-structure .file {
+    color: #34d399;
+  }
+
+  .code-block {
+    background: #0d1117;
+    border-radius: 12px;
+    margin: 16px 0;
+    overflow-x: auto;
+    border: 1px solid #30363d;
+  }
+
+  .code-header {
+    background: #161b22;
+    padding: 10px 16px;
+    border-bottom: 1px solid #30363d;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #8b949e;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .code-header .filename {
+    color: #58a6ff;
+  }
+
+  .code-content {
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+
+  .terminal {
+    background: #0d1117;
+    border-radius: 12px;
+    margin: 16px 0;
+    border: 1px solid #30363d;
+  }
+
+  .terminal-header {
+    background: #161b22;
+    padding: 8px 16px;
+    border-bottom: 1px solid #30363d;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #8b949e;
+  }
+
+  .terminal-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .terminal-dot.red { background: #f85149; }
+  .terminal-dot.yellow { background: #d29922; }
+  .terminal-dot.green { background: #3fb950; }
+
+  .terminal-content {
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    white-space: pre-wrap;
+  }
+
+  .screenshot-box {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin: 16px 0;
+    overflow: hidden;
+  }
+
+  .screenshot-header {
+    background: #f1f5f9;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .screenshot-img {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #f8fafc;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 13px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .comparison-table th {
+    background: #f1f5f9;
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  .comparison-table td:first-child {
+    font-weight: 600;
+    font-family: monospace;
+  }
+
+  .check { color: #10b981; font-weight: bold; }
+  .cross { color: #ef4444; font-weight: bold; }
+
+  .dartpad-box {
+    background: #0d1117;
+    border-radius: 12px;
+    margin: 20px 0;
+    border: 1px solid #30363d;
+    overflow: hidden;
+  }
+
+  .dartpad-header {
+    background: #161b22;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    border-bottom: 1px solid #30363d;
+  }
+
+  .dartpad-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #c9d1d9;
+  }
+
+  .dartpad-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .dartpad-btn {
+    background: #238636;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .dartpad-btn:hover {
+    background: #2ea043;
+  }
+
+  .dartpad-panes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 280px;
+  }
+
+  .dartpad-editor {
+    background: #0d1117;
+    padding: 16px 20px;
+    overflow-x: auto;
+    border-right: 1px solid #30363d;
+  }
+
+  .dartpad-editor pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    margin: 0;
+  }
+
+  .dartpad-console {
+    background: #0d1117;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dartpad-console-header {
+    background: #161b22;
+    padding: 10px 16px;
+    border-bottom: 1px solid #30363d;
+    font-size: 11px;
+    font-weight: 600;
+    color: #3fb950;
+  }
+
+  .dartpad-console-content {
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    white-space: pre-wrap;
+    flex: 1;
+  }
+
+  .gist-link {
+    margin-top: 12px;
+    padding: 8px 12px;
+    background: #161b22;
+    border-radius: 8px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    border: 1px solid #30363d;
+  }
+
+  .gist-link span {
+    color: #8b949e;
+  }
+
+  .gist-link a {
+    color: #58a6ff;
+    text-decoration: none;
+    font-family: monospace;
+    font-size: 11px;
+    word-break: break-all;
+  }
+
+  .dp-live-section {
+    margin-top: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #30363d;
+  }
+
+  .dp-live-iframe {
+    width: 100%;
+    height: 420px;
+    border: none;
+    background: #0d1117;
+  }
+
+  @media (max-width: 700px) {
+    .dartpad-panes {
+      grid-template-columns: 1fr;
+    }
+    .dartpad-editor {
+      border-right: none;
+      border-bottom: 1px solid #30363d;
+    }
+    .dp-live-iframe {
+      height: 350px;
+    }
+  }
+
+  .identity-bar {
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+  }
+
+  .identity-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .identity-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .identity-field label {
+    font-weight: 500;
+    color: #475569;
+  }
+
+  .identity-field input {
+    padding: 6px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+  }
+
+  .identity-field input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59,130,246,0.1);
+  }
+
+  .footer {
+    background: #0f172a;
+    color: #94a3b8;
+    text-align: center;
+    padding: 24px 0;
+    margin-top: 40px;
+    font-size: 13px;
+  }
+
+  .warning-box {
+    background: #fef3c7;
+    border-left: 4px solid #d97706;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 16px 0;
+    font-size: 13px;
+    color: #92400e;
+  }
+
+  #dp-toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #161b22;
+    color: #3fb950;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 13px;
+    z-index: 1000;
+    border: 1px solid #30363d;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="dp-toast">✓ Kode dicopy! Buka DartPad & paste (Ctrl+V)</div>
+
+<div class="identity-bar">
+  <div class="container">
+    <div class="identity-inner">
+      <div class="identity-field">
+        <label>👤 Nama:</label>
+        <input type="text" id="inp-nama" placeholder="Rifqi Prayoga" value="Rifqi Prayoga" style="width:160px">
+      </div>
+      <div class="identity-field">
+        <label>🆔 NIM:</label>
+        <input type="text" id="inp-nim" placeholder="251410005" value="251410005" style="width:120px">
+      </div>
+      <div class="identity-field">
+        <label>📚 Kelas:</label>
+        <input type="text" id="inp-kelas" placeholder="SI2A" value="SI2A" style="width:90px">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="header">
+  <div class="container">
+    <h1>Sesi 5: <span>Multiple Inheritance</span><br>&amp; Class Modifiers di Dart</h1>
+    <p>Pewarisan ganda menggunakan <strong>mixin</strong>, serta keyword <strong>sealed</strong>, <strong>base</strong>, dan <strong>final</strong> untuk mengontrol hierarki class di Dart 3.0+.</p>
+    
+    <div class="info-cards">
+      <div class="info-card"><strong>🎯 Topik:</strong> Mixin + Class Modifiers</div>
+      <div class="info-card"><strong>🛠️ Tools:</strong> VS Code + DartPad</div>
+      <div class="info-card"><strong>🐦 Dart:</strong> 3.0+</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="legend">
+    <div class="legend-badge"><span class="badge-dp">DartPad</span> Bisa dijalankan online (auto-run)</div>
+    <div class="legend-badge"><span class="badge-vs">VS Code</span> Screenshot wajib dikumpulkan</div>
+    <div class="legend-badge"><span class="badge-bonus">Bonus</span> Tugas tambahan halaman 19</div>
+  </div>
+
+  <div class="toc">
+    <h3>📖 Daftar Materi</h3>
+    <div class="toc-grid">
+      <a href="#s1" class="toc-item">1️⃣ Mixin Dasar</a>
+      <a href="#s2" class="toc-item">2️⃣ Studi Kasus</a>
+      <a href="#s3" class="toc-item">3️⃣ Sealed Class</a>
+      <a href="#s4" class="toc-item">4️⃣ Base Class</a>
+      <a href="#s5" class="toc-item">5️⃣ Final Class</a>
+      <a href="#s6" class="toc-item">6️⃣ Perbandingan</a>
+      <a href="#s7" class="toc-item">7️⃣ Pattern Matching</a>
+      <a href="#s8" class="toc-item">8️⃣ Ringkasan</a>
+      <a href="#s9" class="toc-item">⭐ Bonus</a>
+    </div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <div class="section-title">
+        <span>1. Multiple Inheritance dengan Mixin</span>
+        <span class="badge badge-mixin">Mixin</span>
+        <span class="badge-dp">DartPad</span>
+      </div>
+      <div class="section-desc">Dart tidak mendukung multiple inheritance langsung. Solusinya pakai <strong>mixin</strong> dengan keyword <code>with</code>.</div>
+    </div>
+    <div class="section-content">
+      <div class="concept-box">
+        💡 <strong>Apa itu Mixin?</strong> Mixin adalah cara untuk "meminjam" perilaku dari beberapa sumber sekaligus, tanpa membuat hierarki parent-child yang rumit.
+      </div>
+
+      <div class="explanation">
+        <strong>📖 Penjelasan:</strong> Pada contoh pertama, kita melihat <strong>polimorfisme</strong> dengan <code>abstract class Bentuk</code> dan <code>class Persegi implements Bentuk</code>.
+      </div>
+
+      <div class="dartpad-box" id="dp1" data-gist="062f38f55c221e75c22c424c9ee1b5c4">
+        <div class="dartpad-header">
+          <div class="dartpad-logo">🎯 DartPad — Interface & Polimorfisme</div>
+          <div class="dartpad-actions">
+            <button class="dartpad-btn" onclick="copyCode('dp1')">📋 Copy Kode</button>
+          </div>
+        </div>
+        <div class="dartpad-panes">
+          <div class="dartpad-editor">
+            <pre style="background:#0d1117; color:#e6edf3; margin:0; font-family:'JetBrains Mono',monospace; font-size:12px;">abstract class Bentuk {
+  double hitungLuas();
+}
+
+class Persegi implements Bentuk {
+  final double sisi;
+  Persegi(this.sisi);
+
+  @override
+  double hitungLuas() => sisi * sisi;
+}
+
+void main() {
+  Bentuk p = Persegi(5);
+  print('Luas: ${p.hitungLuas()}');
+}</pre>
+          </div>
+          <div class="dartpad-console">
+            <div class="dartpad-console-header">📟 OUTPUT</div>
+            <div class="dartpad-console-content" style="background:#0d1117; color:#7ee787;">Luas: 25.0</div>
+          </div>
+        </div>
+        <div class="gist-link">
+          <span>🔗 Gist:</span>
+          <a href="https://gist.github.com/RifqiPrayoga22/062f38f55c221e75c22c424c9ee1b5c4" target="_blank">https://gist.github.com/RifqiPrayoga22/062f38f55c221e75c22c424c9ee1b5c4</a>
+        </div>
+      </div>
+      <div class="dp-live-section" id="live-dp1"></div>
+
+      <div class="explanation">
+        <strong>📖 Penjelasan Mixin:</strong> Contoh kedua menunjukkan <strong>multiple inheritance</strong> menggunakan <code>mixin</code>.
+      </div>
+
+      <div class="tip-box">
+        💡 <strong>Tips:</strong> Mixin sangat berguna untuk berbagi perilaku antar class yang tidak memiliki hubungan hierarki.
+      </div>
+
+      <div class="dartpad-box" id="dp2" data-gist="316dd3aac883facdafc95353e27f0488">
+        <div class="dartpad-header">
+          <div class="dartpad-logo">🦆 DartPad — Mixin Sederhana</div>
+          <div class="dartpad-actions">
+            <button class="dartpad-btn" onclick="copyCode('dp2')">📋 Copy Kode</button>
+          </div>
+        </div>
+        <div class="dartpad-panes">
+          <div class="dartpad-editor">
+            <pre style="background:#0d1117; color:#e6edf3; margin:0; font-family:'JetBrains Mono',monospace; font-size:12px;">// Multiple Inheritance dengan Mixin
+mixin CanFly {
+  void fly() => print('Can fly!');
+}
+mixin CanSwim {
+  void swim() => print('Can swim!');
+}
+
+class Duck with CanFly, CanSwim {}
+
+void main() {
+  var duck = Duck();
+  duck.fly();
+  duck.swim();
+}</pre>
+          </div>
+          <div class="dartpad-console">
+            <div class="dartpad-console-header">📟 OUTPUT</div>
+            <div class="dartpad-console-content" style="background:#0d1117; color:#7ee787;">Can fly!
+Can swim!</div>
+          </div>
+        </div>
+        <div class="gist-link">
+          <span>🔗 Gist:</span>
+          <a href="https://gist.github.com/RifqiPrayoga22/316dd3aac883facdafc95353e27f0488" target="_blank">https://gist.github.com/RifqiPrayoga22/316dd3aac883facdafc95353e27f0488</a>
+        </div>
+      </div>
+      <div class="dp-live-section" id="live-dp2"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <div class="section-title">
+        <span>2. Studi Kasus: Bird, Duck, Fish, Airplane</span>
+        <span class="badge badge-mixin">Mixin</span>
+        <span class="badge-dp">DartPad</span>
+      </div>
+      <div class="section-desc">Mixin bisa punya state (properti) seperti isFlying, isSwimming.</div>
+    </div>
+    <div class="section-content">
+      <div class="explanation">
+        <strong>📖 Penjelasan:</strong> Contoh ini menunjukkan bahwa <strong>mixin bisa memiliki state</strong> (properti).
+      </div>
+
+      <div class="dartpad-box" id="dp3" data-gist="88807ea0aa7c25f4420519f4a9a0f3cb">
+        <div class="dartpad-header">
+          <div class="dartpad-logo">🐦 DartPad — Bird & Duck (dasar)</div>
+          <div class="dartpad-actions">
+            <button class="dartpad-btn" onclick="copyCode('dp3')">📋 Copy Kode</button>
+          </div>
+        </div>
+        <div class="dartpad-panes">
+          <div class="dartpad-editor">
+            <pre style="background:#0d1117; color:#e6edf3; margin:0; font-family:'JetBrains Mono',monospace; font-size:12px;">mixin CanFly {
+  void fly() { print('Can fly!'); }
+}
+mixin CanSwim {
+  void swim() { print('Can swim!'); }
+}
+class Bird with CanFly {}
+class Duck extends Bird with CanSwim {}
+
+void main() {
+  Bird bird = Bird(); bird.fly();
+  Duck duck = Duck(); duck.fly(); duck.swim();
+}</pre>
+          </div>
+          <div class="dartpad-console">
+            <div class="dartpad-console-header">📟 OUTPUT</div>
+            <div class="dartpad-console-content" style="background:#0d1117; color:#7ee787;">Can fly!
+Can fly!
+Can swim!</div>
+          </div>
+        </div>
+        <div class="gist-link">
+          <span>🔗 Gist:</span>
+          <a href="https://gist.github.com/RifqiPrayoga22/88807ea0aa7c25f4420519f4a9a0f3cb" target="_blank">https://gist.github.com/RifqiPrayoga22/88807ea0aa7c25f4420519f4a9a0f3cb</a>
+        </div>
+      </div>
+      <div class="dp-live-section" id="live-dp3"></div>
+
+      <div class="tip-box">
+        💡 <strong>Penting:</strong> <code>Duck extends Bird with CanSwim</code> — mixin bisa dikombinasikan dengan inheritance!
+      </div>
+
+      <div class="dartpad-box" id="dp4" data-gist="60d2479fb675303b29c303ae93f6b989">
+        <div class="dartpad-header">
+          <div class="dartpad-logo">✈️ DartPad — Lengkap (dengan state)</div>
+          <div class="dartpad-actions">
+            <button class="dartpad-btn" onclick="copyCode('dp4')">📋 Copy Kode</button>
+          </div>
+        </div>
+        <div class="dartpad-panes">
+          <div class="dartpad-editor">
+            <pre style="background:#0d1117; color:#e6edf3; margin:0; font-family:'JetBrains Mono',monospace; font-size:12px;">mixin CanFly {
+  bool _isFlying = false;
+  bool get isFlying => _isFlying;
+  void fly() {
+    if (!_isFlying) { _isFlying = true; print('Started flying!'); }
+    else { print('Already flying!'); }
+  }
+  void land() {
+    if (_isFlying) { _isFlying = false; print('Landed!'); }
+    else { print('Already on the ground!'); }
+  }
+}
+mixin CanSwim {
+  bool _isSwimming = false;
+  bool get isSwimming => _isSwimming;
+  void swim() {
+    if (!_isSwimming) { _isSwimming = true; print('Started swimming!'); }
+    else { print('Already swimming!'); }
+  }
+  void stopSwim() {
+    if (_isSwimming) { _isSwimming = false; print('Stop swimming!'); }
+    else { print('Already on stop swimming!'); }
+  }
+}
+class Bird with CanFly {}
+class Duck extends Bird with CanSwim {}
+class Fish with CanSwim {}
+class Airplane with CanFly {}
+
+void main() {
+  Bird bird = Bird();
+  bird.fly(); bird.fly(); bird.land(); bird.land();
+  print('Is Bird flying? : ${bird.isFlying}');
+}</pre>
+          </div>
+          <div class="dartpad-console">
+            <div class="dartpad-console-header">📟 OUTPUT</div>
+            <div class="dartpad-console-content" style="background:#0d1117; color:#7ee787;">Started flying!
+Already flying!
+Landed!
+Already on the ground!
+Is Bird flying? : false</div>
+          </div>
+        </div>
+        <div class="gist-link">
+          <span>🔗 Gist:</span>
+          <a href="https://gist.github.com/RifqiPrayoga22/60d2479fb675303b29c303ae93f6b989" target="_blank">https://gist.github.com/RifqiPrayoga22/60d2479fb675303b29c303ae93f6b989</a>
+        </div>
+      </div>
+      <div class="dp-live-section" id="live-dp4"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: SEALED -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <div class="section-title">
+        <span>3. Sealed Class</span>
+        <span class="badge badge-sealed">Sealed</span>
+        <span class="badge-vs">VS Code</span>
+      </div>
+      <div class="section-desc">Hierarki tertutup — compiler tahu semua subclass, sehingga switch bisa exhaustive.</div>
+    </div>
+    <div class="section-content">
+      <div class="concept-box">
+        💡 <strong>Mengapa sealed?</strong> Tanpa sealed, siapa saja bisa buat subclass baru di luar library.
+      </div>
+
+      <div class="explanation">
+        <strong>📖 Penjelasan Detail:</strong> <code>sealed class</code> adalah fitur Dart 3.0+ yang menciptakan <strong>hierarki tertutup</strong>.
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-item"><span class="feature-icon">✅</span> Tidak bisa di-extend atau di-implement dari luar library</div>
+        <div class="feature-item"><span class="feature-icon">✅</span> Compiler tahu semua subclass → switch exhaustive</div>
+        <div class="feature-item"><span class="feature-icon">✅</span> Cocok untuk state management</div>
+      </div>
+
+      <div class="file-structure">
+        📁 <span class="folder">sesi5_sealed/</span><br>
+        &nbsp;&nbsp;📄 <span class="file">libsealed.dart</span> → definisi sealed class ApiResponse<br>
+        &nbsp;&nbsp;📄 <span class="file">main.dart</span> → penggunaan + bukti error
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span>📄</span> <span class="filename">libsealed.dart</span></div>
+        <div class="code-content">
+<pre style="background:#0d1117; color:#e6edf3; margin:0; font-family:'JetBrains Mono',monospace; font-size:13px;">// sealed class: hanya bisa di-extend di file/library yang sama
+sealed class ApiResponse {}
+
+class Success extends ApiResponse {
+  final String message;
+  Success(this.message);
+}
+
+class Error extends ApiResponse {
+  final String errorMessage;
+  Error(this.errorMessage);
+}</pre>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span>📄</span> <span class="filename">main.dart</span></div>
+        <div class="code-content">
+<pre style="background:#0d1117; color:#e6edf3; margin:0; font-family:'JetBrains Mono',monospace; font-size:13px;">import 'libsealed.dart';
+
+void handleResponse(ApiResponse response) {
+  if (response is Success) {
+    print("✅ Success: ${response.message}");
+  } else if (response is Error) {
+    print("❌ Error: ${response.errorMessage}");
+  }
+}
+
+void main() {
+  handleResponse(Success("Data berhasil diambil"));
+  handleResponse(Error("Koneksi gagal"));
+}</pre>
+        </div>
+      </div>
+
+      <div class="terminal">
+        <div class="terminal-header"><div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div><span>📟 OUTPUT</span></div>
+        <div class="terminal-content">
+<pre style="background:#0d1117; color:#7ee787; margin:0; font-family:'JetBrains Mono',monospace; font-size:13px;">✅ Success: Data berhasil diambil
+❌ Error: Koneksi gagal</pre>
+        </div>
+      </div>
+
+      <div class="screenshot-box">
+        <div class="screenshot-header">📷 SCREENSHOT VS CODE — Output Normal</div>
+        <img src="https://raw.github.com/RifqiPrayoga22/gambar-latihan/main/Data%20berhasil%20di%20ambil%20dan%20tidak%201.png" class="screenshot-img" alt="Screenshot output sealed class">
+      </div>
+
+      <div class="screenshot-box">
+        <div class="screenshot-header">📷 SCREENSHOT VS CODE — Error Saat Extend dari Luar</div>
+        <img src="https://raw.github.com/RifqiPrayoga22/gambar-latihan/main/Error%201.png" class="screenshot-img" alt="Screenshot error sealed class">
+      </div>
+
+      <div class="warning-box">
+        ⚠️ <strong>Kenapa harus 2 file berbeda?</strong> Aturan sealed hanya berlaku dari luar library.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: BASE -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <div class="section-title">
+        <span>4. Base Class</span>
+        <span class="badge badge-base">Base</span>
+        <span class="badge-vs">VS Code</span>
+      </div>
+      <div class="section-desc">Boleh di-extend dari luar, tapi tidak boleh di-implement.</div>
+    </div>
+    <div class="section-content">
+      <div class="explanation">
+        <strong>📖 Penjelasan Detail:</strong> <code>base class</code> memungkinkan class lain untuk <strong>extend</strong> tapi tidak boleh <strong>implement</strong>.
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-item"><span class="feature-icon">✅</span> Boleh di-extend dari luar library</div>
+        <div class="feature-item"><span class="feature-icon">❌</span> Tidak boleh di-implement dari luar library</div>
+        <div class="feature-item"><span class="feature-icon">✅</span> Subclass juga harus pakai base, final, atau sealed</div>
+      </div>
+
+      <div class="file-structure">
+        📁 <span class="folder">sesi5_base/</span><br>
+        &nbsp;&nbsp;📄 <span class="file">libbase.dart</span> → base class Animal<br>
+        &nbsp;&nbsp;📄 <span class="file">testbase.dart</span> → extends (✅) vs implements (❌)
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span>📄</span> <span class="filename">libbase.dart</span></div>
+        <div class="code-content">
+<pre style="background:#0d1117; color:#e6edf3; margin:0; font-family:'JetBrains Mono',monospace; font-size:13px;">base class Animal {
+  void speak() {}
+}</pre>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span>📄</span> <span class="filename">testbase.dart</span></div>
+        <div class="code-content">
+<pre style="background:#0d1117; color:#e6edf3; margin:0; font-family:'JetBrains Mono',monospace; font-size:13px;">import 'libbase.dart';
+
+base class Dog extends Animal {
+  @override void speak() { print("Woof!"); }
+}
+
+void main() {
+  Dog().speak();
+}</pre>
+        </div>
+      </div>
+
+      <div class="terminal">
+        <div class="terminal-header"><div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div><span>📟 OUTPUT</span></div>
+        <div class="terminal-content">
+<pre style="background:#0d1117; color:#7ee787; margin:0; font-family:'JetBrains Mono',monospace; font-size:13px;">Woof!</pre>
+        </div>
+      </div>
+
+      <div class="screenshot-box">
+        <div class="screenshot-header">📷 SCREENSHOT VS CODE — Output Normal</div>
+        <img src="https://raw.github.com/RifqiPrayoga22/gambar-latihan/main/woof%20meow.png" class="screenshot-img" alt="Screenshot output base class">
+      </div>
+
+      <div class="screenshot-box">
+        <div class="screenshot-header">📷 SCREENSHOT VS CODE — Error Saat Implement</div>
+        <img src="https://raw.github.com/RifqiPrayoga22/gambar-latihan/main/woof%20meow%20eror.png" class="screenshot-img" alt="Screenshot error base class">
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: FINAL -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <div class="section-title">
+        <span>5. Final Class</span>
+        <span class="badge badge-final">Final</span>
+        <span class="badge-vs">VS Code</span>
+      </div>
+      <div class="section-desc">Tidak bisa di-extend atau di-implement dari luar.</div>
+    </div>
+    <div class="section-content">
+      <div class="explanation">
+        <strong>📖 Penjelasan Detail:</strong> <code>final class</code> adalah modifier paling ketat.
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-item"><span class="feature-icon">❌</span> Tidak bisa di-extend dari luar library</div>
+        <div class="feature-item"><span class="feature-icon">❌</span> Tidak bisa di-implement dari luar library</div>
+        <div class="feature-item"><span class="feature-icon">✅</span> Bisa di-extend dari dalam library yang sama</div>
+      </div>
+
+      <div class="file-structure">
+        📁 <span class="folder">sesi5_final/</span><br>
+        &nbsp;&nbsp;📄 <span class="file">libfinal.dart</span> → final class Settings<br>
+        &nbsp;&nbsp;📄 <span class="file">testfinal.dart</span> → error saat extend dari luar
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span>📄</span> <span class="filename">libfinal.dart</span></div>
+        <div class="code-content">
+<pre style="background:#0d1117; color:#e6edf3; margin:0; font-family:'JetBrains Mono',monospace; font-size:13px;">final class Settings {
+  final String theme;
+  final int fontSize;
+  Settings({required this.theme, required this.fontSize});
+}
+
+base class CustomSettings extends Settings {
+  CustomSettings(String theme, int fontSize) : super(theme: theme, fontSize: fontSize);
+}</pre>
+        </div>
+      </div>
+
+      <div class="terminal">
+        <div class="terminal-header"><div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div><span>📟 OUTPUT</span></div>
+        <div class="terminal-content">
+<pre style="background:#0d1117; color:#7ee787; margin:0; font-family:'JetBrains Mono',monospace; font-size:13px;">Theme: Dark, Font Size: 14
+Theme: Dark, Font Size: 14</pre>
+        </div>
+      </div>
+
+      <div class="screenshot-box">
+        <div class="screenshot-header">📷 SCREENSHOT VS CODE — Output Final Class</div>
+        <img src="https://raw.github.com/RifqiPrayoga22/gambar-latihan/main/font%20size.png" class="screenshot-img" alt="Screenshot output final class">
+      </div>
+
+      <div class="screenshot-box">
+        <div class="screenshot-header">📷 SCREENSHOT VS CODE — Error Saat Extend dari Luar</div>
+        <img src="https://raw.github.com/RifqiPrayoga22/gambar-latihan/main/font%20size%20eror.png" class="screenshot-img" alt="Screenshot error final class">
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: PERBANDINGAN -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <div class="section-title">
+        <span>6. Perbandingan Class Modifiers</span>
+        <span class="badge badge-compare">Compare</span>
+      </div>
+      <div class="section-desc">Tabel ringkas perbedaan sealed, base, final, dan default.</div>
+    </div>
+    <div class="section-content">
+      <div class="explanation">
+        <strong>📖 Ringkasan Perbandingan:</strong> Keempat modifier ini memiliki aturan berbeda.
+      </div>
+
+      <table class="comparison-table">
+        <thead>
+          <tr><th>Modifier</th><th>Extend dari luar</th><th>Implement dari luar</th><th>Extend dari dalam</th><th>Implement dari dalam</th><th>Contoh Penggunaan</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="c-sealed">sealed</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td><td>ApiResponse, AppState</td></tr>
+          <tr><td class="c-base">base</td><td class="check">✓</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td><td>Repository, Controller</td></tr>
+          <tr><td class="c-final">final</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td><td>MathUtils, Config</td></tr>
+          <tr><td class="c-def">(default)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td>Class biasa</td></tr>
+        </tbody>
+       </table>
+    </div>
+  </div>
+
+  <!-- SECTION 7: PATTERN MATCHING -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <div class="section-title">
+        <span>7. Sealed + Pattern Matching</span>
+        <span class="badge badge-sealed">Sealed</span>
+        <span class="badge-dp">DartPad</span>
+      </div>
+      <div class="section-desc">Exhaustive switch dengan destructuring — type-safe state management.</div>
+    </div>
+    <div class="section-content">
+      <div class="explanation">
+        <strong>📖 Penjelasan Pattern Matching:</strong> Dart 3.0+ memperkenalkan pattern matching yang bekerja sangat baik dengan <code>sealed class</code>.
+      </div>
+
+      <div class="tip-box">
+        💡 <strong>Keunggulan:</strong> Compiler akan memberikan ERROR jika ada subclass yang belum ditangani di switch!
+      </div>
+
+      <div class="dartpad-box" id="dp12" data-gist="7d2b9ad3c38cad369f6ec36938f5be03">
+        <div class="dartpad-header">
+          <div class="dartpad-logo">📊 DartPad — Status dengan Sealed Class</div>
+          <div class="dartpad-actions">
+            <button class="dartpad-btn" onclick="copyCode('dp12')">📋 Copy Kode</button>
+          </div>
+        </div>
+        <div class="dartpad-panes">
+          <div class="dartpad-editor">
+            <pre style="background:#0d1117; color:#e6edf3; margin:0; font-family:'JetBrains Mono',monospace; font-size:12px;">sealed class Status { const Status(); }
+
+class Loading extends Status { const Loading(); }
+class Loaded extends Status { final String data; const Loaded(this.data); }
+class Failed extends Status { final String error; const Failed(this.error); }
+
+void handleStatus(Status status) {
+  switch (status) {
+    case Loading(): print('Loading...');
+    case Loaded(:final data): print('Data: $data');
+    case Failed(:final error): print('Error: $error');
+  }
+}
+
+void main() {
+  handleStatus(Loading());
+  handleStatus(Loaded('Koneksi berhasil'));
+  handleStatus(Failed('Data tidak ditemukan'));
+}</pre>
+          </div>
+          <div class="dartpad-console">
+            <div class="dartpad-console-header">📟 OUTPUT</div>
+            <div class="dartpad-console-content" style="background:#0d1117; color:#7ee787;">Loading...
+Data: Koneksi berhasil
+Error: Data tidak ditemukan</div>
+          </div>
+        </div>
+        <div class="gist-link">
+          <span>🔗 Gist:</span>
+          <a href="https://gist.github.com/RifqiPrayoga22/7d2b9ad3c38cad369f6ec36938f5be03" target="_blank">https://gist.github.com/RifqiPrayoga22/7d2b9ad3c38cad369f6ec36938f5be03</a>
+        </div>
+      </div>
+      <div class="dp-live-section" id="live-dp12"></div>
+
+      <div class="explanation">
+        <strong>📖 Contoh AppState:</strong> Contoh ini mensimulasikan state management di aplikasi Flutter.
+      </div>
+
+      <div class="dartpad-box" id="dp13" data-gist="bd64dcb5dbd904868f5c5bd53a01c5f7">
+        <div class="dartpad-header">
+          <div class="dartpad-logo">📱 DartPad — AppState Management</div>
+          <div class="dartpad-actions">
+            <button class="dartpad-btn" onclick="copyCode('dp13')">📋 Copy Kode</button>
+          </div>
+        </div>
+        <div class="dartpad-panes">
+          <div class="dartpad-editor">
+            <pre style="background:#0d1117; color:#e6edf3; margin:0; font-family:'JetBrains Mono',monospace; font-size:12px;">sealed class AppState {}
+
+class LoadingState extends AppState {}
+class SuccessState extends AppState {
+  final List&lt;String&gt; items;
+  SuccessState(this.items);
+}
+class ErrorState extends AppState {
+  final String message;
+  ErrorState(this.message);
+}
+
+void updateUI(AppState state) {
+  switch (state) {
+    case LoadingState(): print('⏳ Loading...');
+    case SuccessState(:final items):
+      print('✅ Success! Items: ${items.join(", ")}');
+    case ErrorState(:final message): print('❌ Error: $message');
+  }
+}
+
+void main() {
+  updateUI(LoadingState());
+  updateUI(SuccessState(['Item 1', 'Item 2']));
+  updateUI(ErrorState('Koneksi gagal'));
+}</pre>
+          </div>
+          <div class="dartpad-console">
+            <div class="dartpad-console-header">📟 OUTPUT</div>
+            <div class="dartpad-console-content" style="background:#0d1117; color:#7ee787;">⏳ Loading...
+✅ Success! Items: Item 1, Item 2
+❌ Error: Koneksi gagal</div>
+          </div>
+        </div>
+        <div class="gist-link">
+          <span>🔗 Gist:</span>
+          <a href="https://gist.github.com/RifqiPrayoga22/bd64dcb5dbd904868f5c5bd53a01c5f7" target="_blank">https://gist.github.com/RifqiPrayoga22/bd64dcb5dbd904868f5c5bd53a01c5f7</a>
+        </div>
+      </div>
+      <div class="dp-live-section" id="live-dp13"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: RINGKASAN -->
+  <div class="section" id="s8">
+    <div class="section-header">
+      <div class="section-title">
+        <span>8. Ringkasan & Best Practices</span>
+        <span class="badge badge-compare">Summary</span>
+        <span class="badge-dp">DartPad</span>
+      </div>
+      <div class="section-desc">Kesimpulan dan rekomendasi penggunaan class modifiers.</div>
+    </div>
+    <div class="section-content">
+      <div class="explanation">
+        <strong>📖 Best Practices:</strong>
+      </div>
+      
+      <div class="feature-list">
+        <div class="feature-item"><span class="feature-icon">🔒</span> <strong>sealed</strong> → Hierarki tertutup, exhaustive switch. Gunakan untuk state/result API.</div>
+        <div class="feature-item"><span class="feature-icon">🏗️</span> <strong>base</strong> → Boleh di-extend, tidak boleh di-implement. Untuk framework/base class.</div>
+        <div class="feature-item"><span class="feature-icon">🔚</span> <strong>final</strong> → Tidak bisa di-extend/implement. Untuk utility class & konfigurasi.</div>
+      </div>
+
+      <div class="tip-box">
+        💡 <strong>Kesimpulan:</strong> Pilih modifier sesuai kebutuhan keamanan hierarki class Anda:
+        <ul style="margin-top: 8px; margin-left: 20px;">
+          <li><strong>sealed</strong> → State management (Loading, Success, Error)</li>
+          <li><strong>base</strong> → Framework class yang boleh di-extend</li>
+          <li><strong>final</strong> → Utility class (MathUtils, Config)</li>
+        </ul>
+      </div>
+
+      <div class="dartpad-box" id="dp14" data-gist="10f5bec5ac7c03cb95db7a041d534fe3">
+        <div class="dartpad-header">
+          <div class="dartpad-logo">📦 DartPad — Demo Ketiga Modifier</div>
+          <div class="dartpad-actions">
+            <button class="dartpad-btn" onclick="copyCode('dp14')">📋 Copy Kode</button>
+          </div>
+        </div>
+        <div class="dartpad-panes">
+          <div class="dartpad-editor">
+            <pre style="background:#0d1117; color:#e6edf3; margin:0; font-family:'JetBrains Mono',monospace; font-size:12px;">sealed class Result&lt;T&gt; {}
+class Success&lt;T&gt; extends Result&lt;T&gt; { final T value; Success(this.value); }
+class Failure&lt;T&gt; extends Result&lt;T&gt; { final String error; Failure(this.error); }
+
+base class Animal {
+  final String name; Animal(this.name);
+  void speak() => print('$name makes a sound');
+}
+
+final class Config {
+  Config._();
+  static const String appName = 'MyApp';
+}
+
+void main() {
+  Result&lt;int&gt; r = Success(42);
+  switch (r) {
+    case Success(:final value): print('✅ $value');
+    case Failure(:final error): print('❌ $error');
+  }
+  
+  Animal('Dog').speak();
+  print(Config.appName);
+}</pre>
+          </div>
+          <div class="dartpad-console">
+            <div class="dartpad-console-header">📟 OUTPUT</div>
+            <div class="dartpad-console-content" style="background:#0d1117; color:#7ee787;">✅ 42
+Dog makes a sound
+MyApp</div>
+          </div>
+        </div>
+        <div class="gist-link">
+          <span>🔗 Gist:</span>
+          <a href="https://gist.github.com/RifqiPrayoga22/10f5bec5ac7c03cb95db7a041d534fe3" target="_blank">https://gist.github.com/RifqiPrayoga22/10f5bec5ac7c03cb95db7a041d534fe3</a>
+        </div>
+      </div>
+      <div class="dp-live-section" id="live-dp14"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 9: BONUS -->
+  <div class="section" id="s9">
+    <div class="section-header">
+      <div class="section-title">
+        <span>9. Bonus: Repository + MathUtils</span>
+        <span class="badge badge-bonus">Bonus</span>
+        <span class="badge-vs">VS Code</span>
+      </div>
+      <div class="section-desc">Latihan 1: base class CRUD Repository · Latihan 2: final class MathUtils dengan static methods.</div>
+    </div>
+    <div class="section-content">
+      <div class="explanation">
+        <strong>📖 Penjelasan Bonus:</strong> 
+      </div>
+
+      <div class="file-structure">
+        📁 <span class="folder">sesi5_bonus/</span><br>
+        &nbsp;&nbsp;📄 <span class="file">repository.dart</span> → base class Repository&lt;T&gt; + UserRepository<br>
+        &nbsp;&nbsp;📄 <span class="file">mathutils.dart</span> → final class MathUtils (static methods)<br>
+        &nbsp;&nbsp;📄 <span class="file">main.dart</span> → demonstrasi
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span>📄</span> <span class="filename">repository.dart</span></div>
+        <div class="code-content">
+<pre style="background:#0d1117; color:#e6edf3; margin:0; font-family:'JetBrains Mono',monospace; font-size:13px;">base class Repository&lt;T&gt; {
+  final List&lt;T&gt; _data = [];
+  
+  void create(T item) { _data.add(item); print('[CREATE] $item'); }
+  List&lt;T&gt; readAll() { print('[READ] $_data'); return _data; }
+  void update(int index, T newItem) { _data[index] = newItem; print('[UPDATE] $newItem'); }
+  void delete(int index) { print('[DELETE] ${_data.removeAt(index)}'); }
+}
+
+base class UserRepository extends Repository&lt;String&gt; {
+  void findByName(String keyword) {
+    print('[FIND] ${readAll().where((u) => u.toLowerCase().contains(keyword.toLowerCase())).toList()}');
+  }
+}</pre>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span>📄</span> <span class="filename">mathutils.dart</span></div>
+        <div class="code-content">
+<pre style="background:#0d1117; color:#e6edf3; margin:0; font-family:'JetBrains Mono',monospace; font-size:13px;">final class MathUtils {
+  MathUtils._();  // private constructor → tidak bisa diinstansiasi
+  
+  static double add(double a, double b) { 
+    print('[ADD] $a + $b = ${a+b}'); return a + b; 
+  }
+  static double subtract(double a, double b) { 
+    print('[SUBTRACT] $a - $b = ${a-b}'); return a - b; 
+  }
+  static double multiply(double a, double b) { 
+    print('[MULTIPLY] $a × $b = ${a*b}'); return a * b; 
+  }
+  static double divide(double a, double b) {
+    if (b == 0) { print('[DIVIDE] Error: pembagi 0!'); return 0; }
+    print('[DIVIDE] $a ÷ $b = ${a/b}'); return a / b;
+  }
+}</pre>
+        </div>
+      </div>
+
+      <div class="terminal">
+        <div class="terminal-header"><div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div><span>📟 OUTPUT BONUS</span></div>
+        <div class="terminal-content">
+<pre style="background:#0d1117; color:#7ee787; margin:0; font-family:'JetBrains Mono',monospace; font-size:13px;">==================================================
+LATIHAN 1 — BASE CLASS: Repository
+==================================================
+[CREATE] Ditambahkan: Alice
+[CREATE] Ditambahkan: Bob
+[CREATE] Ditambahkan: Charlie
+[READ]   Total data: 3 → [Alice, Bob, Charlie]
+[UPDATE] Index 1 → Bobby
+[READ]   Total data: 3 → [Alice, Bobby, Charlie]
+[FIND]   Keyword "b": [Bobby]
+[DELETE] Dihapus: Alice
+[READ]   Total data: 2 → [Bobby, Charlie]
+
+==================================================
+LATIHAN 2 — FINAL CLASS: MathUtils
+==================================================
+[ADD]      10.0 + 5.0 = 15.0
+[SUBTRACT] 10.0 - 5.0 = 5.0
+[MULTIPLY] 10.0 × 5.0 = 50.0
+[DIVIDE]   10.0 ÷ 5.0 = 2.0
+[DIVIDE]   Error: pembagi tidak boleh 0!</pre>
+        </div>
+      </div>
+
+      <div class="screenshot-box">
+        <div class="screenshot-header">📷 SCREENSHOT VS CODE — Output Bonus</div>
+        <img src="https://raw.github.com/RifqiPrayoga22/gambar-latihan/main/bonus%20final%205.png" class="screenshot-img" alt="Screenshot output bonus">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="container">
+    <p>Sesi 5 — Multiple Inheritance &amp; Class Modifiers | Dart 3.0+ | <span id="footer-name">Rifqi Prayoga</span></p>
+  </div>
+</div>
+
+<script>
+  function showToast(msg) {
+    const toast = document.getElementById('dp-toast');
+    toast.textContent = msg || '✓ Kode dicopy! Buka DartPad & paste (Ctrl+V)';
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 2000);
+  }
+
+  const CODES = {
+    dp1: `abstract class Bentuk {
+  double hitungLuas();
+}
+
+class Persegi implements Bentuk {
+  final double sisi;
+  Persegi(this.sisi);
+
+  @override
+  double hitungLuas() => sisi * sisi;
+}
+
+void main() {
+  Bentuk p = Persegi(5);
+  print('Luas: \${p.hitungLuas()}');
+}`,
+    dp2: `// Multiple Inheritance dengan Mixin
+mixin CanFly {
+  void fly() => print('Can fly!');
+}
+mixin CanSwim {
+  void swim() => print('Can swim!');
+}
+
+class Duck with CanFly, CanSwim {}
+
+void main() {
+  var duck = Duck();
+  duck.fly();
+  duck.swim();
+}`,
+    dp3: `mixin CanFly {
+  void fly() { print('Can fly!'); }
+}
+mixin CanSwim {
+  void swim() { print('Can swim!'); }
+}
+class Bird with CanFly {}
+class Duck extends Bird with CanSwim {}
+
+void main() {
+  Bird bird = Bird(); bird.fly();
+  Duck duck = Duck(); duck.fly(); duck.swim();
+}`,
+    dp4: `mixin CanFly {
+  bool _isFlying = false;
+  bool get isFlying => _isFlying;
+  void fly() {
+    if (!_isFlying) { _isFlying = true; print('Started flying!'); }
+    else { print('Already flying!'); }
+  }
+  void land() {
+    if (_isFlying) { _isFlying = false; print('Landed!'); }
+    else { print('Already on the ground!'); }
+  }
+}
+mixin CanSwim {
+  bool _isSwimming = false;
+  bool get isSwimming => _isSwimming;
+  void swim() {
+    if (!_isSwimming) { _isSwimming = true; print('Started swimming!'); }
+    else { print('Already swimming!'); }
+  }
+  void stopSwim() {
+    if (_isSwimming) { _isSwimming = false; print('Stop swimming!'); }
+    else { print('Already on stop swimming!'); }
+  }
+}
+class Bird with CanFly {}
+class Duck extends Bird with CanSwim {}
+class Fish with CanSwim {}
+class Airplane with CanFly {}
+
+void main() {
+  Bird bird = Bird();
+  bird.fly(); bird.fly(); bird.land(); bird.land();
+  print('Is Bird flying? : \${bird.isFlying}');
+}`,
+    dp12: `sealed class Status { const Status(); }
+
+class Loading extends Status { const Loading(); }
+class Loaded extends Status { final String data; const Loaded(this.data); }
+class Failed extends Status { final String error; const Failed(this.error); }
+
+void handleStatus(Status status) {
+  switch (status) {
+    case Loading(): print('Loading...');
+    case Loaded(:final data): print('Data: \$data');
+    case Failed(:final error): print('Error: \$error');
+  }
+}
+
+void main() {
+  handleStatus(Loading());
+  handleStatus(Loaded('Koneksi berhasil'));
+  handleStatus(Failed('Data tidak ditemukan'));
+}`,
+    dp13: `sealed class AppState {}
+
+class LoadingState extends AppState {}
+class SuccessState extends AppState {
+  final List<String> items;
+  SuccessState(this.items);
+}
+class ErrorState extends AppState {
+  final String message;
+  ErrorState(this.message);
+}
+
+void updateUI(AppState state) {
+  switch (state) {
+    case LoadingState(): print('⏳ Loading...');
+    case SuccessState(:final items): print('✅ Success! Items: \${items.join(", ")}');
+    case ErrorState(:final message): print('❌ Error: \$message');
+  }
+}
+
+void main() {
+  updateUI(LoadingState());
+  updateUI(SuccessState(['Item 1', 'Item 2']));
+  updateUI(ErrorState('Koneksi gagal'));
+}`,
+    dp14: `sealed class Result<T> {}
+class Success<T> extends Result<T> { final T value; Success(this.value); }
+class Failure<T> extends Result<T> { final String error; Failure(this.error); }
+
+base class Animal {
+  final String name; Animal(this.name);
+  void speak() => print('\$name makes a sound');
+}
+
+final class Config {
+  Config._();
+  static const String appName = 'MyApp';
+}
+
+void main() {
+  Result<int> r = Success(42);
+  switch (r) {
+    case Success(:final value): print('✅ \$value');
+    case Failure(:final error): print('❌ \$error');
+  }
+  
+  Animal('Dog').speak();
+  print(Config.appName);
+}`
+  };
+
+  function copyCode(panelId) {
+    const code = CODES[panelId];
+    if (code) {
+      navigator.clipboard.writeText(code).then(() => {
+        showToast('✓ Kode dicopy! Buka DartPad & paste (Ctrl+V)');
+      }).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = code;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('✓ Kode dicopy!');
+      });
+    }
+  }
+
+  function initLiveDartPads() {
+    const gistMap = {
+      'dp1': '062f38f55c221e75c22c424c9ee1b5c4',
+      'dp2': '316dd3aac883facdafc95353e27f0488',
+      'dp3': '88807ea0aa7c25f4420519f4a9a0f3cb',
+      'dp4': '60d2479fb675303b29c303ae93f6b989',
+      'dp12': '7d2b9ad3c38cad369f6ec36938f5be03',
+      'dp13': 'bd64dcb5dbd904868f5c5bd53a01c5f7',
+      'dp14': '10f5bec5ac7c03cb95db7a041d534fe3'
+    };
+
+    for (const [boxId, gistId] of Object.entries(gistMap)) {
+      const liveSection = document.getElementById(`live-${boxId}`);
+      if (liveSection && !liveSection.querySelector('iframe')) {
+        const iframe = document.createElement('iframe');
+        iframe.className = 'dp-live-iframe';
+        iframe.src = `https://dartpad.dev/embed-dart.html?id=${gistId}&run=true&theme=dark`;
+        iframe.title = `DartPad - ${boxId}`;
+        iframe.loading = 'lazy';
+        liveSection.appendChild(iframe);
+      }
+    }
+  }
+
+  function updateIdentity() {
+    const nama = document.getElementById('inp-nama')?.value || 'Rifqi Prayoga';
+    document.getElementById('footer-name').textContent = nama;
+  }
+
+  document.getElementById('inp-nama')?.addEventListener('input', updateIdentity);
+  document.getElementById('inp-nim')?.addEventListener('input', updateIdentity);
+  document.getElementById('inp-kelas')?.addEventListener('input', updateIdentity);
+  
+  updateIdentity();
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLiveDartPads);
+  } else {
+    initLiveDartPads();
+  }
+</script>
+</body>
+</html>
